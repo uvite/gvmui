@@ -11,12 +11,12 @@
   <a-form class="w-full md:w-full mt-3" :model="password" @submit="modifyPassword">
     <a-form-item
       label="旧密码"
-      field="oldPassword"
+      field="password"
       label-col-flex="80px"
       :rules="[{ required: true, message: '旧密码必填'}]"
     >
       <a-input-password
-        v-model="password.oldPassword"
+        v-model="password.password"
         allow-clear
         autocomplete="off"
       />
@@ -74,7 +74,7 @@
   import tool from '@/utils/tool'
 
   const password = reactive({
-    oldPassword: '',
+    password: '',
     newPassword: '',
     newPassword_confirmation: ''
   })
@@ -110,7 +110,7 @@
 
     if (! (password.length >= 6) ) {
       passwordSafePercent.value = 0
-      return 
+      return
     }
 
     passwordSafePercent.value = 0.1

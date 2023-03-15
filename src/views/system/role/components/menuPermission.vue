@@ -63,11 +63,11 @@
   const emit = defineEmits(['success'])
 
   const open = (row) => {
-    form.value = { id: row.id, name: row.name, code: row.code }
+    form.value = { id: row.ID, name: row.name, code: row.code }
     handlerExpand(false)
     handlerSelect(false)
     handlerLinkage(false)
-    setData(row.id)
+    setData(row.ID)
     visible.value = true
   }
 
@@ -91,21 +91,49 @@
 
   const setData = async (roleId) => {
     const menuResponse = await menu.tree({ scope: true })
-    menuList.value = menuResponse.data
-    const roleResponse = await role.getMenuByRole(roleId)
-    selectKeys.value = roleResponse.data[0].menus.map( item => item.id)
+    let Menus=menuResponse.data.menus
+    console.log(menuResponse)
+    let data=[]
+    for(var i=0;i<Menus.length;i++){
+      let childrens=Menus[i].children
+      let ccs=[]
+      for(var j=0;j<childrens.length;j++){
+        let item={
+          label:childrens[j].name,
+          value:childrens[j].ID,
+          id:childrens[j].ID,
+          parent_id:childrens[j].parent_id,
+        }
+        ccs.push(item)
+      }
+      let item1={
+        label:Menus[i].name,
+        value:Menus[i].ID,
+        id:Menus[i].ID,
+        parent_id:Menus[i].parent_id,
+        children:ccs
+
+      }
+      data.push(item1)
+    }
+    menuList.value = data
+
+    const roleResponse = await role.getMenuByRole({authorityId:roleId})
+    let roleMenus=roleResponse.data.menus||[]
+    selectKeys.value = roleMenus?.map( item => parseInt(item.menuId))
     selectKeys.value.length > 0 && handlerLinkage(true)
     loading.value = false
   }
 
   const submit = async (done) => {
     const nodes = tree.value.maTree.getCheckedNodes()
-    const ids = nodes.map( item => item.id )
-    const response = await role.updateMenuPermission(form.value.id, { menu_ids: ids })
+    // console.log(nodes)
+    // const ids = nodes.map( item => item.id )
+    const response = await role.updateMenuPermission( { role_id:form.value.id,menus: nodes })
     response.success && Message.success(response.message)
     emit('success')
     done(true)
-  } 
+  }
 
   const close = () => visible.value = false
 

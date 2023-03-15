@@ -29,10 +29,12 @@ export default {
    * 通过角色获取菜单
    * @returns
    */
-  getMenuByRole(id) {
+  getMenuByRole(data = {}) {
+
     return request({
-      url: 'system/role/getMenuByRole/' + id,
-      method: 'get'
+      url: 'systemRole/getMenuAuthority' ,
+      method: 'post',
+      data
     })
   },
 
@@ -119,10 +121,10 @@ export default {
     })
   },
 
-  updateMenuPermission(id, data) {
+  updateMenuPermission( data) {
     return request({
-      url: 'system/role/menuPermission/' + id,
-      method: 'put',
+      url: 'systemRole/addMenuAuthority',
+      method: 'post',
       data
     })
   },

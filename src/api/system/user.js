@@ -5,11 +5,11 @@ export default {
    * 获取用户
    * @returns
    */
-  getPageList(params = {}) {
+  getPageList(data = {}) {
     return request({
-      url: 'system/user/index',
-      method: 'get',
-      params
+      url: 'user/getUserList',
+      method: 'post',
+      data
     })
   },
 
@@ -42,7 +42,7 @@ export default {
    */
   save(params = {}) {
     return request({
-      url: 'system/user/save',
+      url: 'user/admin_register',
       method: 'post',
       data: params
     })
@@ -90,7 +90,7 @@ export default {
    */
   update(id, data = {}) {
     return request({
-      url: 'system/user/update/' + id,
+      url: 'user/setUserInfo' ,
       method: 'put',
       data
     })
@@ -150,8 +150,8 @@ export default {
    */
   updateInfo(data = {}) {
     return request({
-      url: 'system/user/updateInfo',
-      method: 'post',
+      url: 'user/setSelfInfo',
+      method: 'put',
       data
     })
   },
@@ -162,7 +162,7 @@ export default {
    */
   modifyPassword(data = {}) {
     return request({
-      url: 'system/user/modifyPassword',
+      url: 'user/changePassword',
       method: 'post',
       data
     })
